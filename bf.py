@@ -14,6 +14,7 @@ Notes:
 
     The special character End Of Line is 0xff (255).
 '''
+import os
 import os.path
 import sys
 import re
@@ -84,6 +85,36 @@ def hexdump(array, cursor, output):
 
         line += '|\n'
         output.write(line)
+
+
+def is_executable(fpath):
+    if not fpath:
+        return False
+
+    return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+
+def which(program):
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_executable(program):
+            return program
+    else:
+        for path in os.environ['PATH'].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_executable(exe_file):
+                return exe_file
+
+    return None
+
+
+def find_compiler():
+    cc = which('gcc') or which('clang') or which('cc')
+    if not cc:
+        print('error: unable to find a compiler', file=sys.stderr)
+        exit(5)
+
+    return cc
 
 
 def execute(source_input, process_input, process_output, debug):
@@ -279,7 +310,8 @@ if __name__ == '__main__':
             with tempfile.NamedTemporaryFile(mode='w+', suffix='.c', prefix='bf.') as tmp:
                 compile(input, tmp, args.debug, args.size)
                 tmp.flush()
-                subprocess.call(['gcc', '-O1' if args.debug else '-O3',
+                subprocess.call([find_compiler(),
+                                 '-O1' if args.debug else '-O3',
                                  '-o', args.output,
                                  tmp.name])
         else:
