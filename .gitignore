@@ -1,0 +1,10 @@
+# temp file
+*.swp
+*~
+.DS_Store
+
+# python
+*.py[co]
+
+# bf.py and gcc/clang
+a.out
