@@ -72,3 +72,71 @@ a_read=">[$a_movlr-]
         >[<-[$a_movrr-] $a_movrr >-]
         >[<-[<-[$a_movrr-] $a_movrr >-] <$a_movrr >>-]
         <<<<<<"
+
+###############################################################################
+# Register load and store
+#
+# addresses on 1 byte, data bus on 1 or 4 bytes
+# layout: i | 0 0 d0 d1 d2 d3 | 0 0 tab[0]_0 tab[0]_1 tab[0]_2 tab[0]_3 
+#                             | 0 0 tab[1]_0 tab[1]_1 tab[1]_2 tab[1]_3
+#                             | ...
+#
+###############################################################################
+
+# [r_fill_index] write 1 before each array cell until we reach the index
+# pre: the cursor is on i
+# post: the cursor is on i and i=0
+r_fill_index="[>>>>>>>[>>>>>>]+[<<<<<<]<-]"
+
+# [r_remove_index] remove all 1 before each array cell until we reach the beginning
+# pre: the cursor in on the current array cell
+# post: the cursor is on i
+r_remove_index="<<<<<<[-<<<<<<]<"
+
+# [r_read1] read 1 byte
+# pre: i = index, d0=d1=d2=d3=0
+#      the cursor is on i
+# post: i=0, d0 = read value, d1=d2=d3=0
+#       the cursor is on i
+r_read1="$r_fill_index
+         >>>>>>>[>>>>>>]
+         >>[-<+<<<<<<<[<<<<<<]>>+>>>>[>>>>>>]>>]<[->+<]<
+         $r_remove_index"
+
+# [r_read4] read 4 bytes
+# pre: i = index, d0=d1=d2=d3=0
+#      the cursor is on i
+# post: i=0, [d0 d1 d2 d3] = read value
+#       the cursor is on i
+r_read4="$r_fill_index
+         >>>>>>>[>>>>>>]
+         >>[-<+<<<<<<<[<<<<<<]>>+>>>>[>>>>>>]>>]<[->+<]
+         >>[-<<+<<<<<<<[<<<<<<]>>>+>>>[>>>>>>]>>>]<<[->>+<<]
+         >>>[-<<<+<<<<<<<[<<<<<<]>>>>+>>[>>>>>>]>>>>]<<<[->>>+<<<]
+         >>>>[-<<<<+<<<<<<<[<<<<<<]>>>>>+>[>>>>>>]>>>>>]<<<<[->>>>+<<<<]<
+         $r_remove_index"
+
+# [r_write1] write 1 byte
+# pre: i = index, d0 = value, d1=d2=d3=0
+#      the cursor is on i
+# post: i=d0=d1=d2=d3=0
+#       the cursor is on i
+r_write1="$r_fill_index
+          >>>>>>>[>>>>>>]>>[-]<<<<<<<<[<<<<<<]
+          >>[->>>>[>>>>>>]>>+<<<<<<<<[<<<<<<]>>]
+          >>>>[>>>>>>]
+          $r_remove_index"
+
+# [r_write4] write 4 bytes
+# pre: i = index, [d0 d1 d2 d3] = value
+#      the cursor is on i
+# post: i=d0=d1=d2=d3=0
+#       the cursor is on i
+r_write4="$r_fill_index
+          >>>>>>>[>>>>>>]>>[-]>[-]>[-]>[-]<<<<<<<<<<<[<<<<<<]
+          >>[->>>>[>>>>>>]>>+<<<<<<<<[<<<<<<]>>]
+          >[->>>[>>>>>>]>>>+<<<<<<<<<[<<<<<<]>>>]
+          >[->>[>>>>>>]>>>>+<<<<<<<<<<[<<<<<<]>>>>]
+          >[->[>>>>>>]>>>>>+<<<<<<<<<<<[<<<<<<]>>>>>]
+          >[>>>>>>]
+          $r_remove_index"
