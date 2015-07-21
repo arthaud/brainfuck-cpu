@@ -205,10 +205,52 @@ main="# reading the program until we read 0
         >>>[<<<+>>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<-]<<<[->>>+<<<]
         # fetch the next instruction
         >>>>>>>>>>>>>> $m_read
-        # decode and execute the instruction (need to clean the memory header)
-        !
-        # break
-      ]
-      "
+        # decode and execute the instruction
+        #   decrement d0, test d0 == 0, decrement d0, test d0 == 0, and so on
+        #   each instruction starts with the cursor on d0
+        #   each instruction writes its length on i0 (the main loop increment ip after)
+        >>>>>
+        >+>-[<->
+          # Unknow instruction : EXIT
+          <<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<
+          -
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>
+          >>>>>>>
+
+          <<<<<<+>>>>>> # incr ip
+        <]<[->
+          # 0x01 : NOP
+          <<<<<<++>>>>>> # incr ip
+        <<]
+        # clean memory header
+        >>[-]>[-]>[-]>[-]<<<<<<<<<
+        # increment ip
+        [<<<<<<<<<<<<<<<< $incr >>>>>>>>>>>>>>>>-]
+        # go back to address 0
+        <
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+        <<<<<<<<<<<<<<<<
+      ]"
 
 echo "$main"
