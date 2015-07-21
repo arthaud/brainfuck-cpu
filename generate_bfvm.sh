@@ -180,6 +180,35 @@ main="# reading the program until we read 0
         # go back to memory (d0) and read the next char
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>,
       ]
+      <<<<<<< # memory
+      <<<<<<<<<<<<<<<<
+      <<<<<<<<<<<<<<<<
+      <<<<<<<<<<<<<<<<
+      <<<<<<<<<<<<<<<<
+      <<<<<<<<<<<<<<<<
+      <<<<<<<<<<<<<<<<
+      <<<<<<<<<<<<<<<< # registers
+      <<<<<<<<<<<<<<<< # address 0
+      # execute the program
+      +[# Main Loop
+        # copy the instruction pointer (r15 = ip) in the memory index
+        >>>>>>>>>>>>>>>> # registers
+        >>>>>>>>>>>>>>>>
+        >>>>>>>>>>>>>>>>
+        >>>>>>>>>>>>>>>>
+        >>>>>>>>>>>>>>>>
+        >>>>>>>>>>>>>>>>
+        >>>>>>>>>>>>>>>>
+        >>> # r15 = ip
+        [<+>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<-]<[->+<]
+        >>[<<+>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<-]<<[->>+<<]
+        >>>[<<<+>>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<-]<<<[->>>+<<<]
+        # fetch the next instruction
+        >>>>>>>>>>>>>> $m_read
+        # decode and execute the instruction (need to clean the memory header)
+        !
+        # break
+      ]
       "
 
 echo "$main"
