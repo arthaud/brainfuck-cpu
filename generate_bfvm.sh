@@ -5,72 +5,72 @@
 # Least significant bit: left (little-endian)
 
 ###############################################################################
-# Array load and store
+# Memory load and store
 #
 # addresses on 3 bytes, data bus on 4 bytes
 # layout: s=0 | i0 i1 i2 | j0 j1 j2 | d0 d1 d2 d3 | tab[0..n]
 #
 ###############################################################################
 
-# [a_movlw] move the cursor on the left (array write)
+# [m_movlw] move the cursor on the left (memory write)
 # pre: the cursor is on i0
 # post: the cursor is on i0
-a_movlw=">>>>>>>>>>[-<<<<<<<<<<<+>>>>>>>>>>>]
+m_movlw=">>>>>>>>>>[-<<<<<<<<<<<+>>>>>>>>>>>]
          <[->+<]<[->+<]<[->+<]<[->+<]
          <[->+<]<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]
          >"
 
-# [a_movrw] move the cursor on the right (array write)
+# [m_movrw] move the cursor on the right (memory write)
 # pre: the cursor is on j0
 # post: the cursor is on j0
-a_movrw="[-<+>]>[-<+>]>[-<+>]
+m_movrw="[-<+>]>[-<+>]>[-<+>]
          <<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]
          >>>>"
 
-# [a_write] store 4 bytes in the array
+# [m_write] store 4 bytes in the memory
 # pre: s=0, [i0 i1 i2] = [j0 j1 j2] = index, [d0 d1 d2 d3] = value
 #      the cursor is on s
 # post: s=i0=i1=i2=j0=j1=j2=d0=d1=d2=d3=0
 #       the cursor is on s
-a_write=">[$a_movlw-]
-         >[<-[$a_movlw-] $a_movlw >-]
-         >[<-[<-[$a_movlw-] $a_movlw >-] <$a_movlw >>-]
+m_write=">[$m_movlw-]
+         >[<-[$m_movlw-] $m_movlw >-]
+         >[<-[<-[$m_movlw-] $m_movlw >-] <$m_movlw >>-]
          >>>>>>>>[-]>[-]>[-]>[-]<<<<<<<
          [->>>>+<<<<]>[->>>>+<<<<]>[->>>>+<<<<]>[->>>>+<<<<]<<<<<<
-         [$a_movrw-]
-         >[<-[$a_movrw-] $a_movrw >-]
-         >[<-[<-[$a_movrw-] $a_movrw >-] <$a_movrw >>-]
+         [$m_movrw-]
+         >[<-[$m_movrw-] $m_movrw >-]
+         >[<-[<-[$m_movrw-] $m_movrw >-] <$m_movrw >>-]
          <<<<<<"
 
-# [a_movlr] move the cursor on the left (array read)
+# [m_movlr] move the cursor on the left (memory read)
 # pre: the cursor is on i0
 # post: the cursor is on i0
-a_movlr=">>>>>>>>>>[-<<<<<<<<<<<+>>>>>>>>>>>]
+m_movlr=">>>>>>>>>>[-<<<<<<<<<<<+>>>>>>>>>>>]
 	 <<<<<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]
          >"
 
-# [a_movrr] move the cursor on the right (array read)
+# [m_movrr] move the cursor on the right (memory read)
 # pre: the cursor is on j0
 # post: the cursor is on j0
-a_movrr="[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]
+m_movrr="[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]
          <<<<<<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]
          >>>>"
 
-# [a_read] load 4 bytes from the array
+# [m_read] load 4 bytes from the memory
 # pre: s=0, [i0 i1 i2] = [j0 j1 j2] = index, d0=d1=d2=d3=0
 #      the cursor is on s
 # post: s=i0=i1=i2=j0=j1=j2=0, [d0 d1 d2 d3] = loaded value
 #       the cursor is on s
-a_read=">[$a_movlr-]
-        >[<-[$a_movlr-] $a_movlr >-]
-        >[<-[<-[$a_movlr-] $a_movlr >-] <$a_movlr >>-]
+m_read=">[$m_movlr-]
+        >[<-[$m_movlr-] $m_movlr >-]
+        >[<-[<-[$m_movlr-] $m_movlr >-] <$m_movlr >>-]
         >>>>>>>>[-<<<<+<<<<+>>>>>>>>]<<<<<<<<[->>>>>>>>+<<<<<<<<]
         >>>>>>>>>[-<<<<+<<<<<+>>>>>>>>>]<<<<<<<<<[->>>>>>>>>+<<<<<<<<<]
         >>>>>>>>>>[-<<<<+<<<<<<+>>>>>>>>>>]<<<<<<<<<<[->>>>>>>>>>+<<<<<<<<<<]
         >>>>>>>>>>>[-<<<<+<<<<<<<+>>>>>>>>>>>]<<<<<<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]>
-        [$a_movrr-]
-        >[<-[$a_movrr-] $a_movrr >-]
-        >[<-[<-[$a_movrr-] $a_movrr >-] <$a_movrr >>-]
+        [$m_movrr-]
+        >[<-[$m_movrr-] $m_movrr >-]
+        >[<-[<-[$m_movrr-] $m_movrr >-] <$m_movrr >>-]
         <<<<<<"
 
 ###############################################################################
