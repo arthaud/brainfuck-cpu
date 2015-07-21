@@ -4,6 +4,11 @@
 
 # Least significant bit: left (little-endian)
 
+# [incr] increment a register (4-bytes integer)
+# pre: layout is 0 0 x0 x1 x2 x3, cursor on the first 0
+# post: cursor on the first 0
+incr=">+>+[<-]<[->+>+[<-]<[->+>+[<-]<[->+>+[<-]<[-<]<]<]<]"
+
 ###############################################################################
 # Memory load and store
 #
