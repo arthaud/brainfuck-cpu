@@ -210,7 +210,7 @@ main="# reading the program until we read 0
         #   each instruction starts with the cursor on d0
         #   each instruction writes its length on i0 (the main loop increment ip after)
         >>>>>
-        >+>-[<->
+        >+>-[
           # Unknow instruction : EXIT
           <<<<<<<
           <<<<<<<<<<<<<<<<
@@ -233,10 +233,11 @@ main="# reading the program until we read 0
           >>>>>>>
 
           <<<<<<+>>>>>> # incr ip
-        <]<[->
+        <-]<[->
           # 0x01 : NOP
-          <<<<<<++>>>>>> # incr ip
+          <<<<<<+>>>>>> # incr ip
         <<]
+        !
         # clean memory header
         >>[-]>[-]>[-]>[-]<<<<<<<<<
         # increment ip
