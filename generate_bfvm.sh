@@ -273,4 +273,4 @@ main="# reading the code until we consecutively read 4 null bytes
       ]"
 
 # Remove comments and whitespaces
-echo "$main" | sed "s/#[^\n]*$//" | tr -d ' \t' | sed ':a;N;$!ba;s/\n//g'
+echo "$main" | sed "s/#[^\n]*$//" | tr -d ' \n\t'

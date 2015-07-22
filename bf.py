@@ -166,7 +166,7 @@ def execute(source_input, process_input, process_output, debug):
 
                     source_cursor += 1
 
-                if source_cursor >= len(source):
+                if level > 0:
                     print('error: unbalanced brackets, missing ]', file=sys.stderr)
                     exit(3)
 
