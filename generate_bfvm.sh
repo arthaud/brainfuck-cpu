@@ -51,7 +51,7 @@ m_write=">[$m_movlw-]
 # pre: the cursor is on i0
 # post: the cursor is on i0
 m_movlr=">>>>>>>>>>[-<<<<<<<<<<<+>>>>>>>>>>>]
-	 <<<<<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]
+         <<<<<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]<[->+<]
          >"
 
 # [m_movrr] move the cursor on the right (memory read)
@@ -256,4 +256,5 @@ main="# reading the code until we consecutively read 4 null bytes
         <<<<<<<<<<<<<<<<
       ]"
 
-echo "$main"
+# Remove comments and whitespaces
+echo "$main" | sed "s/#[^\n]*$//" | tr -d ' \n\t'
