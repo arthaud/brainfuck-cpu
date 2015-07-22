@@ -204,7 +204,7 @@ main="# reading the code until we consecutively read 4 null bytes
         #   each instruction starts with the cursor on d0
         #   each instruction writes its length on i0 (the main loop increment ip after)
         >>>>>
-        >+>-[-[
+        >+>-[-[-[
           # Unknow instruction : EXIT
           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>
@@ -214,7 +214,7 @@ main="# reading the code until we consecutively read 4 null bytes
           # instruction length
           <<<<<<+>>>>>>
         <-]<[->
-          # 0x02 : SETB
+          # 0x03 : SETB
           # move the register in i
           >[<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+>>>>>>>>>>>>>
@@ -228,12 +228,28 @@ main="# reading the code until we consecutively read 4 null bytes
           # write register
           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-          $r_write1
+          $r_write4
           >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
           >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
           # instruction length
           <<<<<<+++>>>>>>
+        <<]>]<[->
+          # 0x02 : CLR
+          # move the register in i
+          >[<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+>>>>>>>>>>>>>
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-]
+          # write register
+          <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+          <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+          $r_write4
+          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+          # instruction length
+          <<<<<<++>>>>>>
         <<]>]<[->
           # 0x01 : NOP
           # instruction length
@@ -257,4 +273,4 @@ main="# reading the code until we consecutively read 4 null bytes
       ]"
 
 # Remove comments and whitespaces
-echo "$main" | sed "s/#[^\n]*$//" | tr -d ' \n\t'
+echo "$main" | sed "s/#[^\n]*$//" | tr -d ' \t' | sed ':a;N;$!ba;s/\n//g'
