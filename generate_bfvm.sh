@@ -76,22 +76,36 @@ m_movrr="[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]>[-<+>]
          <<<<<<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]
          >>>>"
 
-# [m_read] load 4 bytes from the memory
+# [m_read1] load a byte from the memory
+# pre: s=0, [i0 i1 i2] = [j0 j1 j2] = index, d0=d1=d2=d3=0
+#      the cursor is on s
+# post: s=i0=i1=i2=j0=j1=j2=d1=d2=d3=0, d0 = loaded value
+#       the cursor is on s
+m_read1=">[$m_movlr-]
+         >[<-[$m_movlr-] $m_movlr >-]
+         >[<-[<-[$m_movlr-] $m_movlr >-] <$m_movlr >>-]
+         >>>>>>>>[-<<<<+<<<<+>>>>>>>>]<<<<<<<<[->>>>>>>>+<<<<<<<<]>
+         [$m_movrr-]
+         >[<-[$m_movrr-] $m_movrr >-]
+         >[<-[<-[$m_movrr-] $m_movrr >-] <$m_movrr >>-]
+         <<<<<<"
+
+# [m_read4] load 4 bytes from the memory
 # pre: s=0, [i0 i1 i2] = [j0 j1 j2] = index, d0=d1=d2=d3=0
 #      the cursor is on s
 # post: s=i0=i1=i2=j0=j1=j2=0, [d0 d1 d2 d3] = loaded value
 #       the cursor is on s
-m_read=">[$m_movlr-]
-        >[<-[$m_movlr-] $m_movlr >-]
-        >[<-[<-[$m_movlr-] $m_movlr >-] <$m_movlr >>-]
-        >>>>>>>>[-<<<<+<<<<+>>>>>>>>]<<<<<<<<[->>>>>>>>+<<<<<<<<]
-        >>>>>>>>>[-<<<<+<<<<<+>>>>>>>>>]<<<<<<<<<[->>>>>>>>>+<<<<<<<<<]
-        >>>>>>>>>>[-<<<<+<<<<<<+>>>>>>>>>>]<<<<<<<<<<[->>>>>>>>>>+<<<<<<<<<<]
-        >>>>>>>>>>>[-<<<<+<<<<<<<+>>>>>>>>>>>]<<<<<<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]>
-        [$m_movrr-]
-        >[<-[$m_movrr-] $m_movrr >-]
-        >[<-[<-[$m_movrr-] $m_movrr >-] <$m_movrr >>-]
-        <<<<<<"
+m_read4=">[$m_movlr-]
+         >[<-[$m_movlr-] $m_movlr >-]
+         >[<-[<-[$m_movlr-] $m_movlr >-] <$m_movlr >>-]
+         >>>>>>>>[-<<<<+<<<<+>>>>>>>>]<<<<<<<<[->>>>>>>>+<<<<<<<<]
+         >>>>>>>>>[-<<<<+<<<<<+>>>>>>>>>]<<<<<<<<<[->>>>>>>>>+<<<<<<<<<]
+         >>>>>>>>>>[-<<<<+<<<<<<+>>>>>>>>>>]<<<<<<<<<<[->>>>>>>>>>+<<<<<<<<<<]
+         >>>>>>>>>>>[-<<<<+<<<<<<<+>>>>>>>>>>>]<<<<<<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]>
+         [$m_movrr-]
+         >[<-[$m_movrr-] $m_movrr >-]
+         >[<-[<-[$m_movrr-] $m_movrr >-] <$m_movrr >>-]
+         <<<<<<"
 
 ###############################################################################
 # Register load and store
@@ -213,7 +227,7 @@ main="# reading the code until we consecutively read 4 null bytes
         >>[<<+>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<-]<<[->>+<<]
         >>>[<<<+>>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<-]<<<[->>>+<<<]
         # fetch the next instruction
-        >>>>>>>>>>>>>> $m_read
+        >>>>>>>>>>>>>> $m_read4
         # decode and execute the instruction
         #   decrement d0, test d0 == 0, decrement d0, test d0 == 0, and so on
         #   each instruction starts with the cursor on d0
