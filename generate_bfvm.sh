@@ -32,20 +32,35 @@ m_movrw="[-<+>]>[-<+>]>[-<+>]
          <<<<<<<[->>>>>>>>>>>+<<<<<<<<<<<]
          >>>>"
 
-# [m_write] store 4 bytes in the memory
+# [m_write1] store a byte in the memory
+# pre: s=0, [i0 i1 i2] = [j0 j1 j2] = index, d0 = value, d1=d2=d3=0
+#      the cursor is on s
+# post: s=i0=i1=i2=j0=j1=j2=d0=d1=d2=d3=0
+#       the cursor is on s
+m_write1=">[$m_movlw-]
+          >[<-[$m_movlw-] $m_movlw >-]
+          >[<-[<-[$m_movlw-] $m_movlw >-] <$m_movlw >>-]
+          >>>>>>>>[-]<<<<
+          [->>>>+<<<<]<<<
+          [$m_movrw-]
+          >[<-[$m_movrw-] $m_movrw >-]
+          >[<-[<-[$m_movrw-] $m_movrw >-] <$m_movrw >>-]
+          <<<<<<"
+
+# [m_write4] store 4 bytes in the memory
 # pre: s=0, [i0 i1 i2] = [j0 j1 j2] = index, [d0 d1 d2 d3] = value
 #      the cursor is on s
 # post: s=i0=i1=i2=j0=j1=j2=d0=d1=d2=d3=0
 #       the cursor is on s
-m_write=">[$m_movlw-]
-         >[<-[$m_movlw-] $m_movlw >-]
-         >[<-[<-[$m_movlw-] $m_movlw >-] <$m_movlw >>-]
-         >>>>>>>>[-]>[-]>[-]>[-]<<<<<<<
-         [->>>>+<<<<]>[->>>>+<<<<]>[->>>>+<<<<]>[->>>>+<<<<]<<<<<<
-         [$m_movrw-]
-         >[<-[$m_movrw-] $m_movrw >-]
-         >[<-[<-[$m_movrw-] $m_movrw >-] <$m_movrw >>-]
-         <<<<<<"
+m_write4=">[$m_movlw-]
+          >[<-[$m_movlw-] $m_movlw >-]
+          >[<-[<-[$m_movlw-] $m_movlw >-] <$m_movlw >>-]
+          >>>>>>>>[-]>[-]>[-]>[-]<<<<<<<
+          [->>>>+<<<<]>[->>>>+<<<<]>[->>>>+<<<<]>[->>>>+<<<<]<<<<<<
+          [$m_movrw-]
+          >[<-[$m_movrw-] $m_movrw >-]
+          >[<-[<-[$m_movrw-] $m_movrw >-] <$m_movrw >>-]
+          <<<<<<"
 
 # [m_movlr] move the cursor on the left (memory read)
 # pre: the cursor is on i0
@@ -176,7 +191,7 @@ main="# reading the code until we consecutively read 4 null bytes
        >>[<<+>>>>>>>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<<<<<<<-]<<[->>+<<]
        >>>[<<<+>>>>>>>>>>>>>>>>>>>>>>>+>>>+<<<<<<<<<<<<<<<<<<<<<<<-]<<<[->>>+<<<]
        # store the value
-       >>>>>>>>>>>>>>>>>>>> $m_write
+       >>>>>>>>>>>>>>>>>>>> $m_write1
        # increment the current index (r14 = sp)
        <<<<<<<<<<<<<<<<<<<<< $incr
        # go back to address 0
